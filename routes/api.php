@@ -11,6 +11,9 @@ $api->version('v1', ['namespace'=>'App\Api\V1\Controllers'],function (Router $ap
         $api->post('login', 'AuthController@login');
         $api->get('refresh', 'AuthController@refreshToken');
         $api->post('logout', 'AuthController@logout');
+        $api->patch('update', 'AuthController@update');
+
+        $api->delete('users/{user}','AuthController@destroy');
 
         $api->get('test', 'AuthController@test');
         $api->get('me', 'AuthController@me');

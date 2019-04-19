@@ -15,7 +15,7 @@ class AuthController extends BaseController
     public function __construct()
     {
         //@todo 用户认证方法过滤
-        $this->middleware('auth:api',['except'=>['register','login','test']]);
+        $this->middleware('auth:api',['except'=>['register','login','test','destroy']]);
     }
 
     public function register(SignUpRequest $request,JWTAuth $JWTAuth)
@@ -67,10 +67,33 @@ class AuthController extends BaseController
     {
         $user = auth()->user();
 
-        
-
         return $this->ok($user);
     }
+
+    public function update(Request $request)
+    {
+        $user = auth()->user();
+        try{
+            $res = $user->update($request->only(['name']));
+        }catch (\Exception $exception){
+            Log::info('更新失败');
+        }
+        if ($res){
+            return $this->ok('更新成功');
+        }
+        return $this->error('更新失败');
+    }
+
+    public function destroy($userId)
+    {
+        $user = User::find($userId);
+        $res = $user->delete();
+        if ($res){
+            return $this->ok('删除成功');
+        }
+        return $this->error('删除失败');
+    }
+
 
     public function test()
     {
