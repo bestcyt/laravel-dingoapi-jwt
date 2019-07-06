@@ -6,23 +6,23 @@ use Dingo\Api\Routing\Router;
 $api = app(Router::class);
 
 $api->version('v1',function (Router $api) {
-
-    $api->group(['namespace'=>'App\Api\V1\Controllers','prefix' => 'a'],function (Router $api){
+    $api->group(['namespace'=>'App\Api\V1\Controllers','prefix' => 'b'],function (Router $api){
         $api->group(['prefix' => 'auth'], function(Router $api) {
-            $api->post('register', 'AuthController@register');
-            $api->post('login', 'AuthController@login');
-            $api->get('refresh', 'AuthController@refreshTokena');
-            $api->post('logout', 'AuthController@logout');
-            $api->patch('update', 'AuthController@update');
+            $api->post('register', 'BAuthController@register');
+            $api->post('login', 'BAuthController@login');
+            $api->get('refresh', 'BAuthController@refreshToken');
+            $api->post('logout', 'BAuthController@logout');
+            $api->patch('update', 'BAuthController@update');
 
-            $api->delete('users/{user}','AuthController@destroy');
+            $api->delete('users/{user}','BAuthController@destroy');
 
-            $api->get('test', 'AuthController@test');
+            $api->get('test', 'BAuthController@test');
 
         });
 
-        $api->group(['middleware' => ['jwt.auth','jwt.system:a']], function(Router $api) {
-            $api->get('auth/me', 'AuthController@me');
+        $api->group(['middleware' =>  ['jwt.auth','jwt.system:a']], function(Router $api) {
+            $api->get('auth/me', 'BAuthController@me');
+
             $api->get('protected', function() {
                 return response()->json([
                     'message' => 'Access to protected resources granted! You are seeing this text as you provided the token correctly.'

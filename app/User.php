@@ -5,11 +5,17 @@ namespace App;
 use Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable;
+    //系统a的user表
+    use Notifiable,HasRoles;
+
+    protected $table = 'users';
+
+    protected $guard_name = 'a-api';
 
     /**
      * The attributes that are mass assignable.
@@ -57,6 +63,6 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        return ['system' => 'a'];
     }
 }

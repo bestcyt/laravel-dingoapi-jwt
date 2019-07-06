@@ -4,13 +4,14 @@ namespace App\Api\V1\Controllers;
 
 use App\Api\V1\Requests\LoginRequest;
 use App\Api\V1\Requests\SignUpRequest;
+use App\Models\BUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Claims\JwtId;
 use Tymon\JWTAuth\JWTAuth;
 use App\User;
 
-class AuthController extends BaseController
+class BAuthController extends BaseController
 {
     public function __construct()
     {
@@ -22,9 +23,9 @@ class AuthController extends BaseController
     {
         //@todo 创建用户，返回token
         try{
-            $user = User::create($request->all());
+            $user = BUser::create($request->all());
         }catch(\Exception $exception){
-            Log::error('create user error in '.now());
+            Log::error('createBuser error in '.now());
         }
 
         if (!$user){
@@ -63,15 +64,9 @@ class AuthController extends BaseController
         return $this->responseWithToken(auth()->refresh());
     }
 
-    public function me(JWTAuth $JWTAuth)
+    public function me()
     {
-        $payLoad =  $JWTAuth->parseToken()->payload();
-        return $this->ok([
-            $JWTAuth->parseToken()->payload(),
-            $payLoad['sub']
-//            $this->auth()->
-        ]);
-        $user = auth()->user();
+        $user = auth()->guard('b-api')->user();
 
         return $this->ok($user);
     }
@@ -92,7 +87,7 @@ class AuthController extends BaseController
 
     public function destroy($userId)
     {
-        $user = User::find($userId);
+        $user =Buser::find($userId);
         $res = $user->delete();
         if ($res){
             return $this->ok('删除成功');
