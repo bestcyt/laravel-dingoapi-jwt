@@ -41,14 +41,18 @@ class BAuthController extends BaseController
     {
         //@todo 获取信息验证，返回token
 
+
         $checkUser = $request->only(['email','password','name']);
-        $token = $JWTAuth->attempt($checkUser);
+        $user = BUser::where([
+            ['email','=',$checkUser['email']],
+            ['password','=',$checkUser['password']],
+            ['name','=',$checkUser['name']],
+        ])->first();
+        $token = $JWTAuth->fromUser($user);
         if (!$token){
             return $this->error('用户信息不匹配');
         }
-
         return $this->responseWithToken($token);
-
     }
 
     public function logout()
@@ -66,6 +70,7 @@ class BAuthController extends BaseController
 
     public function me()
     {
+        return 55;
         $user = auth()->guard('b-api')->user();
 
         return $this->ok($user);
