@@ -22,3 +22,9 @@ https://learnku.com/articles/10889/detailed-implementation-of-jwt-extensions#484
 更新：http://laravel-dingoapi-jwt.test/api/auth/update  patch ,带个name
 
 删除：http://laravel-dingoapi-jwt.test/api/auth/users/3  delete
+
+
+2.多系统在同一个数据库，区分jwt的token，使用自定义字段  
+在user的getJWTCustomClaims，自定义该系统的字段；  
+然后定义中间件来检测：CheckSystem  
+在分割的路由上用['middleware' => ['jwt.auth','jwt.system:a']] 不同路由传入不同的a或者b，代表系统  
