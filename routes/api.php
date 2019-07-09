@@ -21,7 +21,7 @@ $api->version('v1',function (Router $api) {
 
         });
 
-        $api->group(['middleware' => ['jwt.auth','jwt.system:a']], function(Router $api) {
+        $api->group(['middleware' => ['auth:a-api','jwt.system:a']], function(Router $api) {
             $api->get('auth/me', 'AuthController@me');
             $api->get('protected', function() {
                 return response()->json([

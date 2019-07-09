@@ -68,7 +68,7 @@ class AuthController extends BaseController
         $payLoad =  $JWTAuth->parseToken()->payload();
         return $this->ok([
             $JWTAuth->parseToken()->payload(),
-            $payLoad['sub']
+            $user = auth()->user()
 //            $this->auth()->
         ]);
         $user = auth()->user();

@@ -20,8 +20,14 @@ $api->version('v1',function (Router $api) {
 
         });
 
-        $api->group(['middleware' =>  ['jwt.auth','jwt.system:a']], function(Router $api) {
+        $api->post('util/translate', 'UtilController@guzzle');
+
+//        $api->get('auth/me', 'BAuthController@me');
+        $api->group(['middleware' =>  ['auth:b-api','jwt.system:b']], function(Router $api) {
             $api->get('auth/me', 'BAuthController@me');
+            $api->get('auth/initRoles', 'BAuthController@initRoles');
+            $api->get('auth/seeRoleBack', 'BAuthController@seeRoleBack');
+
 
             $api->get('protected', function() {
                 return response()->json([

@@ -4,9 +4,12 @@ namespace App\Api\V1\Controllers;
 
 use App\Api\V1\Requests\LoginRequest;
 use App\Api\V1\Requests\SignUpRequest;
+use App\Jobs\b\initBRolesAndPermission;
 use App\Models\BUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 use Tymon\JWTAuth\Claims\JwtId;
 use Tymon\JWTAuth\JWTAuth;
 use App\User;
@@ -16,7 +19,7 @@ class BAuthController extends BaseController
     public function __construct()
     {
         //@todo 用户认证方法过滤
-        $this->middleware('auth:api',['except'=>['register','login','test','destroy']]);
+//        $this->middleware('auth:api',['except'=>['register','login','test','destroy']]);
     }
 
     public function register(SignUpRequest $request,JWTAuth $JWTAuth)
@@ -68,12 +71,21 @@ class BAuthController extends BaseController
         return $this->responseWithToken(auth()->refresh());
     }
 
+    public function seeRoleBack(){
+        $role = Role::create(['guard_name' => 'a-api', 'name' => 'test_role']);
+
+        return $this->ok($role);
+    }
+
     public function me()
     {
-        return 55;
-        $user = auth()->guard('b-api')->user();
+        $user = auth()->guard('b-api')->getPayload();
 
-        return $this->ok($user);
+        return $this->ok([$user]);
+    }
+
+    public function initRoles(){
+        initBRolesAndPermission::dispatch();
     }
 
     public function update(Request $request)

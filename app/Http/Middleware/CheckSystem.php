@@ -24,6 +24,7 @@ class CheckSystem
         if ($token_system != $system){
             throw new UnauthorizedException('非改系统用户');
         }
+
         return $next($request);
     }
 }

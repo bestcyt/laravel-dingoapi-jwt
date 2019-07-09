@@ -1,5 +1,7 @@
 <?php
 
+use App\User;
+
 return [
 
     /*
@@ -14,7 +16,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api',
+        'guard' => 'a-api',
         'passwords' => 'users',
     ],
 
@@ -80,6 +82,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
+
+        'busers' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\BUser::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',
